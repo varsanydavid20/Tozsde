@@ -134,9 +134,16 @@ function formatNumber(n, currency=false) {
     return currency ? ('$' + out) : out;
 }
 
-const ctx = document.getElementById("chart");
+const chartEl = document.getElementById("chart");
+const ctx = chartEl && chartEl.getContext ? chartEl.getContext('2d') : null;
 
-const chart = new Chart(ctx, {
+if (typeof Chart === 'undefined') {
+    console.error('Chart.js is not loaded. Ensure the CDN script is present in index.html.');
+}
+
+let chart = null;
+if (ctx && typeof Chart !== 'undefined') {
+    chart = new Chart(ctx, {
     type: "line",
     data: {
         labels: history.map((_, i) => i),
