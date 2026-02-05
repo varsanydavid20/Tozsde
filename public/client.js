@@ -10,6 +10,7 @@ const loginModal = document.getElementById("loginModal");
 const nameInput = document.getElementById("nameInput");
 const loginBtn = document.getElementById("loginBtn");
 const currentUserEl = document.getElementById("currentUser");
+const logoutBtn = document.getElementById("logoutBtn");
 const adminBtn = document.getElementById("adminBtn");
 const adminPanel = document.getElementById("adminPanel");
 const closeAdminBtn = document.getElementById("closeAdminBtn");
@@ -71,11 +72,24 @@ function updateUserDisplay() {
     if (currentUserEl) {
         currentUserEl.textContent = currentUser ? `👤 ${currentUser}` : '';
     }
+    if (logoutBtn) {
+        logoutBtn.classList.toggle('hidden', !currentUser);
+    }
+}
+
+function handleLogout() {
+    currentUser = null;
+    try { localStorage.removeItem("vpiCurrentUser"); } catch (e) { console.warn('Could not remove from localStorage', e); }
+    updateUserDisplay();
+    if (loginModal) loginModal.classList.remove("hidden");
 }
 
 // Login event listeners
 if (loginBtn) loginBtn.addEventListener("click", handleLogin);
 if (nameInput) nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") handleLogin(); });
+
+// Logout event listener
+if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
 
 // Admin panel toggles
 if (adminBtn) adminBtn.addEventListener("click", () => {
