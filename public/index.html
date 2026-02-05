@@ -9,6 +9,38 @@
 </head>
 <body>
 
+<!-- Login Modal -->
+<div id="loginModal" class="login-modal">
+    <div class="login-container">
+        <h2>VPI Exchange</h2>
+        <p>Kérlek add meg a nevedet</p>
+        <input id="nameInput" type="text" placeholder="Neved" maxlength="50" />
+        <button id="loginBtn">Bejelentkezés</button>
+    </div>
+</div>
+
+<!-- Admin Panel Toggle -->
+<div id="adminToggle" class="admin-toggle">
+    <button id="adminBtn" title="Admin panel">👤</button>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanel" class="admin-panel">
+    <div class="admin-header">
+        <h3>Admin Panel</h3>
+        <button id="closeAdminBtn" class="close-btn">✕</button>
+    </div>
+    <div class="admin-content">
+        <div class="admin-section">
+            <h4>Bejelentkezések</h4>
+            <div id="loginsList" class="logins-list"></div>
+        </div>
+        <div class="admin-section">
+            <button id="clearLoginsBtn" class="mini-btn">Bejelentkezések törlése</button>
+        </div>
+    </div>
+</div>
+
 <div class="app">
     <div class="grid">
         <main class="main">
@@ -18,12 +50,15 @@
                     <div class="price" id="price">$0.0000</div>
                 </div>
 
-                <div class="change" id="change">
-                    <div class="change-inner">
-                        <span id="arrow">▲</span>
-                        <span id="percent">0.00%</span>
+                <div style="text-align: right;">
+                    <div class="current-user" id="currentUser"></div>
+                    <div class="change" id="change">
+                        <div class="change-inner">
+                            <span id="arrow">▲</span>
+                            <span id="percent">0.00%</span>
+                        </div>
+                        <div class="small">/s</div>
                     </div>
-                    <div class="small">/s</div>
                 </div>
             </div>
 

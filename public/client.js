@@ -2,6 +2,95 @@ let price = localStorage.getItem("vpiPrice")
     ? parseFloat(localStorage.getItem("vpiPrice"))
     : 0.156300;
 
+// --- LOGIN SYSTEM ---
+let currentUser = localStorage.getItem("vpiCurrentUser") || null;
+let userLogins = localStorage.getItem("vpiUserLogins") ? JSON.parse(localStorage.getItem("vpiUserLogins")) : [];
+
+const loginModal = document.getElementById("loginModal");
+const nameInput = document.getElementById("nameInput");
+const loginBtn = document.getElementById("loginBtn");
+const currentUserEl = document.getElementById("currentUser");
+const adminBtn = document.getElementById("adminBtn");
+const adminPanel = document.getElementById("adminPanel");
+const closeAdminBtn = document.getElementById("closeAdminBtn");
+const loginsListEl = document.getElementById("loginsList");
+const clearLoginsBtn = document.getElementById("clearLoginsBtn");
+
+function formatLoginTime(ts) {
+    const d = new Date(ts);
+    return d.toLocaleString('hu-HU');
+}
+
+function renderLogins() {
+    if (!loginsListEl) return;
+    if (!userLogins || userLogins.length === 0) {
+        loginsListEl.innerHTML = '<div style="color: var(--muted); font-size: 13px;">Nincs bejelentkezés még</div>';
+        return;
+    }
+    loginsListEl.innerHTML = '';
+    userLogins.slice().reverse().forEach(login => {
+        const div = document.createElement('div');
+        div.className = 'login-item';
+        div.innerHTML = `<div class="name">${login.name}</div><div class="time">${formatLoginTime(login.ts)}</div>`;
+        loginsListEl.appendChild(div);
+    });
+}
+
+function addLogin(name) {
+    userLogins.push({ name, ts: Date.now() });
+    localStorage.setItem("vpiUserLogins", JSON.stringify(userLogins));
+    renderLogins();
+}
+
+function handleLogin() {
+    const name = nameInput.value.trim();
+    if (!name) {
+        nameInput.focus();
+        return;
+    }
+    currentUser = name;
+    localStorage.setItem("vpiCurrentUser", currentUser);
+    addLogin(name);
+    updateUserDisplay();
+    loginModal.classList.add("hidden");
+    nameInput.value = '';
+}
+
+function updateUserDisplay() {
+    if (currentUserEl) {
+        currentUserEl.textContent = currentUser ? `👤 ${currentUser}` : '';
+    }
+}
+
+// Login event listeners
+if (loginBtn) loginBtn.addEventListener("click", handleLogin);
+if (nameInput) nameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") handleLogin(); });
+
+// Admin panel toggles
+if (adminBtn) adminBtn.addEventListener("click", () => {
+    if (adminPanel) adminPanel.classList.toggle("open");
+});
+
+if (closeAdminBtn) closeAdminBtn.addEventListener("click", () => {
+    if (adminPanel) adminPanel.classList.remove("open");
+});
+
+if (clearLoginsBtn) clearLoginsBtn.addEventListener("click", () => {
+    if (confirm("Biztos? Ezt nem lehet visszavonni.")) {
+        userLogins = [];
+        localStorage.setItem("vpiUserLogins", JSON.stringify(userLogins));
+        renderLogins();
+    }
+});
+
+// Show login modal if not logged in
+if (!currentUser) {
+    if (loginModal) loginModal.classList.remove("hidden");
+}
+
+updateUserDisplay();
+renderLogins();
+
 let history = localStorage.getItem("vpiHistory")
     ? JSON.parse(localStorage.getItem("vpiHistory"))
     : Array(120).fill(price);
