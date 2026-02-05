@@ -83,9 +83,13 @@ if (clearLoginsBtn) clearLoginsBtn.addEventListener("click", () => {
     }
 });
 
-// Show login modal if not logged in
-if (!currentUser) {
-    if (loginModal) loginModal.classList.remove("hidden");
+// Ensure login modal visibility matches stored login state
+if (loginModal) {
+    if (currentUser) {
+        loginModal.classList.add("hidden");
+    } else {
+        loginModal.classList.remove("hidden");
+    }
 }
 
 updateUserDisplay();
