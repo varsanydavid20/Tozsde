@@ -19,6 +19,8 @@ const arrowEl = document.getElementById("arrow");
 // Market data DOM refs and supply constants
 const marketCapEl = document.getElementById("marketcap");
 const volumeEl = document.getElementById("volume");
+const volumePeriodEl = document.getElementById("volumePeriod");
+let currentVolumePeriod = "day";
 const fdvEl = document.getElementById("fdv");
 const totalSupplyEl = document.getElementById("totalSupply");
 const circulatingEl = document.getElementById("circulatingSupply");
@@ -106,7 +108,7 @@ function renderTradeHistory() {
     list.forEach(t => {
         const div = document.createElement('div');
         div.className = 'item';
-        div.innerHTML = `<div class="left"><div class="side ${t.side}">${t.side.toUpperCase()}</div><div class="time">${formatTime(t.ts)}</div></div><div class="value">${t.amount.toFixed(4)} @ $${t.price.toFixed(4)}</div>`;
+        div.innerHTML = `<div class="left"><div class="side ${t.side}">${t.side.toUpperCase()}</div><div class="time">${formatTime(t.ts)}</div></div><div class="value">${t.amount.toFixed(4)} --> $${t.price.toFixed(4)}</div>`;
         tradeHistoryEl.appendChild(div);
     });
 }
@@ -335,7 +337,20 @@ function update() {
     // Update market info (market cap, FDV, volume)
     const marketCap = price * circulatingSupply;
     const fdv = price * totalSupply;
-    const volume = (Math.random() * 20 + 5) * 1000000; // random mock volume 5-25M
+    
+    // Calculate volume based on selected period
+    let dailyVolume = (Math.random() * 20 + 5) * 1000000; // 5-25M base daily volume
+    let volume = dailyVolume;
+    
+    if (currentVolumePeriod === "week") {
+        volume = dailyVolume * 7;
+    } else if (currentVolumePeriod === "day") {
+        volume = dailyVolume;
+    } else if (currentVolumePeriod === "minute") {
+        volume = dailyVolume / 1440; // 24h = 1440 min
+    } else if (currentVolumePeriod === "second") {
+        volume = dailyVolume / 86400; // 24h = 86400 sec
+    }
 
     if (marketCapEl) marketCapEl.textContent = formatNumber(marketCap, true);
     if (fdvEl) fdvEl.textContent = formatNumber(fdv, true);
@@ -344,6 +359,13 @@ function update() {
     if (totalSupplyEl) totalSupplyEl.textContent = formatNumber(totalSupply);
     if (circulatingEl) circulatingEl.textContent = formatNumber(circulatingSupply);
     if (maxSupplyEl) maxSupplyEl.textContent = formatNumber(maxSupply);
+
+    // Volume selector listener
+    if (volumePeriodEl) {
+        volumePeriodEl.addEventListener('change', (e) => {
+            currentVolumePeriod = e.target.value;
+        });
+    }
 
     // Check auto orders after a price update
     checkAutoOrders();
