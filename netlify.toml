@@ -1,0 +1,7 @@
+[build]
+  publish = "public"
+  command = ""
+
+[context.production.environment]
+# Example: set environment variables here if needed
+# NODE_ENV = "production"
