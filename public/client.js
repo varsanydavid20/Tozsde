@@ -181,6 +181,8 @@ if (ctx && typeof Chart !== 'undefined') {
     }
 });
 
+}
+
 // --- simple trade simulation (local only) ---
 let usdBalance = localStorage.getItem("vpiUSD") ? parseFloat(localStorage.getItem("vpiUSD")) : 1000.0;
 let vpiBalance = localStorage.getItem("vpiHoldings") ? parseFloat(localStorage.getItem("vpiHoldings")) : 0.0;
