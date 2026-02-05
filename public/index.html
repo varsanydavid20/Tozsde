@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VPI Exchange</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="app">
+    <div class="grid">
+        <main class="main">
+            <div class="top">
+                <div>
+                    <h1>VPI</h1>
+                    <div class="price" id="price">$0.0000</div>
+                </div>
+
+                <div class="change" id="change">
+                    <div class="change-inner">
+                        <span id="arrow">▲</span>
+                        <span id="percent">0.00%</span>
+                    </div>
+                    <div class="small">/s</div>
+                </div>
+            </div>
+
+            <div class="chart">
+                <canvas id="chart"></canvas>
+            </div>
+
+            <!-- Trade box placed within main (also duplicated as fixed on screen via CSS) -->
+            <div class="trade-box" id="tradeBox">
+                <div class="trade-header">Buy / Sell</div>
+                <div class="balance">USD: <span id="usdBalance">$1,000.00</span> · VPI: <span id="vpiBalance">0.0000</span></div>
+                <div class="trade-row">
+                    <input id="tradeAmount" type="number" min="0" step="0.0001" placeholder="Amount (VPI)" inputmode="decimal" aria-label="Vásárolni vagy eladni kívánt VPI mennyiség" />
+                    <select id="tradeSide" aria-label="Válassz: buy vagy sell"><option value="buy">Buy</option><option value="sell">Sell</option></select>
+                </div>
+                <div class="trade-row small">
+                    <button class="mini-btn" id="buyMaxBtn">Buy max</button>
+                    <button class="mini-btn" id="sellMaxBtn">Sell max</button>
+                    <div class="fee">Fee: <span id="feePercent">0.20%</span></div>
+                </div>
+                <div class="trade-actions">
+                    <button id="tradeBtn" aria-label="Végrehajtás">Execute</button>
+                </div>
+                <div class="trade-msg" id="tradeMsg"></div>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="card">
+                <div class="label">Market cap</div>
+                <div id="marketcap" class="value">$1.37B</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Volume (24h)</div>
+                <div id="volume" class="value">$15.29M</div>
+            </div>
+
+            <div class="card">
+                <div class="label">FDV</div>
+                <div id="fdv" class="value">$15.64B</div>
+            </div>
+
+            <div class="card small-grid">
+                <div>
+                    <div class="label">Total supply</div>
+                    <div id="totalSupply" class="value">100B</div>
+                </div>
+                <div>
+                    <div class="label">Max supply</div>
+                    <div id="maxSupply" class="value">100B</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="label">Circulating supply</div>
+                <div id="circulatingSupply" class="value">8.79B</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Recent trades</div>
+                <div id="tradeHistory" class="trade-history">—</div>
+            </div>
+
+            <div class="card">
+                <div class="label">Auto orders (set & forget)</div>
+                <div class="auto-form">
+                    <select id="autoSide"><option value="buy">Buy</option><option value="sell">Sell</option></select>
+                    <input id="autoPrice" type="number" step="0.0001" placeholder="Target price" />
+                    <input id="autoAmount" type="number" step="0.0001" placeholder="Amount (VPI)" />
+                    <label class="auto-repeat"><input id="autoRepeat" type="checkbox" /> Repeat</label>
+                    <button id="addAutoBtn" class="mini-btn">Add</button>
+                </div>
+                <div id="autoList" class="auto-list">—</div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<script src="client.js"></script>
+</body>
+</html>
