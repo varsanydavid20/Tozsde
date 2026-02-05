@@ -43,17 +43,28 @@ function addLogin(name) {
 }
 
 function handleLogin() {
-    const name = nameInput.value.trim();
-    if (!name) {
-        nameInput.focus();
-        return;
+    try {
+        if (!nameInput) {
+            console.error('Login failed: name input element not found');
+            alert('Hiba: nem található a beviteli mező. Nyisd meg a konzolt további részletekért.');
+            return;
+        }
+        const name = (nameInput.value || '').trim();
+        console.log('Attempting login with name:', name);
+        if (!name) {
+            nameInput.focus();
+            return;
+        }
+        currentUser = name;
+        try { localStorage.setItem("vpiCurrentUser", currentUser); } catch (e) { console.warn('Could not write to localStorage', e); }
+        addLogin(name);
+        updateUserDisplay();
+        if (loginModal) loginModal.classList.add("hidden");
+        nameInput.value = '';
+    } catch (err) {
+        console.error('Error in handleLogin:', err);
+        alert('Hiba a bejelentkezés közben. Nézd meg a konzolt.');
     }
-    currentUser = name;
-    localStorage.setItem("vpiCurrentUser", currentUser);
-    addLogin(name);
-    updateUserDisplay();
-    loginModal.classList.add("hidden");
-    nameInput.value = '';
 }
 
 function updateUserDisplay() {
